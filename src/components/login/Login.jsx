@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import "./login.css";
 function Login() {
     return (
@@ -17,6 +18,8 @@ function Login() {
                 </div>
 
                 <img src="./google.png" alt="" />
+
+                <ToastContainer />
 
 
 
