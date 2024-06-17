@@ -2,7 +2,7 @@
 // import Detail from "./components/detail/Detail"
 // import List from "./components/list/List"
 // import Chat from "./components/chat/Chat"
-// import Login from "./components/login/Login";
+import Login from "./components/login/Login";
 import Signup from "./components/login/Signup";
 function App() {
   // const user = true;
@@ -11,7 +11,8 @@ function App() {
       {/* <List />
       <Chat /> */}
       {/* <Detail /> */}
-      <Signup/>
+      {/* <Signup/> */}
+      <Login></Login>
 
 
 
