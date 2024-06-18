@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import "./chat.css"
 import EmojiPicker from "emoji-picker-react"
+import { auth } from "../../lib/firebase";
+import { signOut } from "firebase/auth";
+import { toast } from "react-toastify";
 function Chat() {
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
@@ -12,6 +15,18 @@ function Chat() {
     const handleEmoji = e => {
         setText((prev) => prev + e.emoji);
         // setPicker(false);
+    }
+    const handleSignOut=async()=>{
+        try{
+            await signOut(auth);
+            toast.success("Logout Successfully", {
+                position: "top-center"
+            })
+        }catch(err){
+            toast.error("Try again after some time!!", {
+                position: "top-center"
+            })
+        }
     }
     return (
         <div className="chat">
@@ -26,7 +41,7 @@ function Chat() {
                 <div className="icons">
                     <img src="./phone.png" alt="" />
                     <img src="./video.png" alt="" />
-                    <img src="./info.png" alt="" />
+                    <img onClick={handleSignOut} src="./info.png" alt="" />
                 </div>
             </div>
             <div className="center">

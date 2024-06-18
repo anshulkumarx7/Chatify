@@ -1,8 +1,9 @@
 import { ToastContainer, toast } from "react-toastify";
 import "./login.css";
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { auth } from "../../lib/firebase";
 function Login() {
 
     const [user, setUser] = useState({
@@ -30,7 +31,7 @@ function Login() {
                 });
             }
             else {
-                toast.error("Error" + err.code, {
+                toast.error("Error: " + err.code, {
                     position: "top-center"
                 });
             }

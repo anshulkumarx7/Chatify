@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./login.css";
 import 'react-toastify/dist/ReactToastify.css';
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, db } from "../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import { doc, setDoc } from "firebase/firestore";
 import { GoogleAuthProvider } from "firebase/auth";
@@ -53,6 +53,7 @@ function Signup() {
         try {
             const provider = new GoogleAuthProvider();
             const res = await signInWithPopup(auth, provider);
+            console.log(res);
             await setDoc(doc(db, "users", res.user.uid), {
                 username: res.user.displayName,
                 email: res.user.email,
