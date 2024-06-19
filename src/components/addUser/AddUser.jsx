@@ -1,8 +1,13 @@
 import "./addUser.css";
 function AddUser() {
+    const handleSearch=(event)=>{
+        event.preventDefault();
+        
+
+    }
     return (
         <div className="addUser">
-            <form>
+            <form onSubmit={handleSearch}>
                 <input type="text" placeholder="Search Username" name="username" />
                 <button>Search</button>
             </form>

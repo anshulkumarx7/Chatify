@@ -7,14 +7,13 @@ import { toast } from "react-toastify";
 function Chat() {
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
-
+    
     const endRef=useRef(null);
     useEffect(()=>{
         endRef.current?.scrollIntoView({behaviour:"smooth"});
     },[]);
     const handleEmoji = e => {
         setText((prev) => prev + e.emoji);
-        // setPicker(false);
     }
     const handleSignOut=async()=>{
         try{

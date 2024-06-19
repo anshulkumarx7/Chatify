@@ -13,7 +13,7 @@ function Signup() {
         "email": "",
         "password": "",
         "photo": "",
-
+        "bio":""
     })
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -25,6 +25,8 @@ function Signup() {
                 username: userDetails.username,
                 email: userDetails.email,
                 photo: userDetails.photo,
+                uid:res.user.uid,
+                bio:userDetails.bio,
                 blocked: [],
             });
             await setDoc(doc(db, "userchats", res.user.uid), {
@@ -58,6 +60,8 @@ function Signup() {
                 username: res.user.displayName,
                 email: res.user.email,
                 photo: res.user.photoURL,
+                uid:res.user.uid,
+                bio:"",
                 blocked: [],
             });
             await setDoc(doc(db, "userchats", res.user.uid), {

@@ -55,6 +55,9 @@ function Login() {
                 </div>
 
                 <img src="./google.png" alt="" />
+                <div className="registeredUser">
+                    <p><span><a href="">Create an account</a></span></p>
+                </div>
 
                 <ToastContainer />
 

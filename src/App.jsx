@@ -4,7 +4,7 @@ import List from "./components/list/List"
 import Chat from "./components/chat/Chat"
 import { useEffect } from "react";
 import Login from "./components/login/Login";
-// import Signup from "./components/login/Signup";
+import Signup from "./components/login/Signup";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/useUserStore";
@@ -40,7 +40,7 @@ function App() {
             {/* <Detail /> */}
           </>
         ) : (
-          <Login />
+          <Signup />
         )
       }
 

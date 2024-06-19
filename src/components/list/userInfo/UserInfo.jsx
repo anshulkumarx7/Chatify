@@ -2,6 +2,7 @@ import { useUserStore } from "../../../lib/useUserStore";
 import "./userInfo.css";
 function UserInfo() {
   const { currentUser} = useUserStore();
+  console.log(currentUser.photo)
   return (
     <div className="userInfo">
         <div className="user">
