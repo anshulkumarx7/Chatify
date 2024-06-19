@@ -8,6 +8,7 @@ import Login from "./components/login/Login";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/useUserStore";
+import { FallingLines } from "react-loader-spinner";
 function App() {
   const { currentUser, fetchUserInfo, isLoading } = useUserStore();
   useEffect(() => {
@@ -21,8 +22,14 @@ function App() {
     };
   }, [fetchUserInfo]);
   console.log(currentUser);
-  if(isLoading) return <div>Loading...</div>
-
+  if (isLoading) return <div>
+    <FallingLines
+      color="#FFFFFF"
+      width="200"
+      visible={true}
+      ariaLabel="falling-circles-loading"
+    />
+  </div>
   return (
     <div className="container">
       {
