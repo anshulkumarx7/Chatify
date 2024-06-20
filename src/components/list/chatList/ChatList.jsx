@@ -11,7 +11,6 @@ function ChatList() {
     useEffect(() => {
         const unsub = onSnapshot(doc(db, "userchats", currentUser.uid), async (res) => {
             const items = res.data().chats;
-
             const promises = items.map(async(item) => {
                 const docRef = doc(db, "users", item.receiverId);
                 const docSnap = await getDoc(docRef);
