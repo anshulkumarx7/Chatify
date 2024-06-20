@@ -40,7 +40,7 @@ function App() {
             {/* <Detail /> */}
           </>
         ) : (
-          <Signup />
+          <Login />
         )
       }
 

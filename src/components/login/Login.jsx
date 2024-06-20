@@ -21,7 +21,7 @@ function Login() {
     const handleLogin = async () => {
         try {
             await signInWithEmailAndPassword(auth, user.email, user.password);
-            toast.success("Registered Succesfully !!", {
+            toast.success("LoggedIn Succesfully !!", {
                 position: "top-center"
             })
         } catch (err) {

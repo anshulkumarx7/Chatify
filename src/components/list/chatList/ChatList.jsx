@@ -15,8 +15,6 @@ function ChatList() {
                 const docRef = doc(db, "users", item.receiverId);
                 const docSnap = await getDoc(docRef);
                 const user=docSnap.data();
-
-
                 return {...item,user};
             });
 
@@ -39,9 +37,9 @@ function ChatList() {
             </div>
             {chats.map(chat => (
                 <div className="item" key={chat.chatId}>
-                    <img src="./avatar.png" alt="" />
+                    <img src={chat.user.photo || "./avatar.png" }alt="" />
                     <div className="texts">
-                        <span>Aryan</span>
+                        <span>{chat.user.username}</span>
                         <p>{chat.lastMessage}</p>
                     </div>
                 </div>

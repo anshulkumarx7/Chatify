@@ -16,13 +16,10 @@ function AddUser() {
     const handleSearch = async (event) => {
         event.preventDefault();
         try {
-            console.log("checked");
             const userRef = collection(db, "users");
             const q = query(userRef, where("username", "==", uname));
             const querySnapshot = await getDocs(q);
-            console.log(querySnapshot.empty)
             if (!querySnapshot.empty) {
-                console.log("hence")
                 setUser(querySnapshot.docs[0].data());
             }
             else {
@@ -39,14 +36,12 @@ function AddUser() {
 
         }
     }
-
     const handleAdd = async () => {
         const chatsRef = collection(db, "chats");
         const userChatsRef = collection(db, "userchats");
         console.log(user);
         try {
             const newChatsRef = doc(chatsRef);
-
             await setDoc(newChatsRef, {
                 createdAt: serverTimestamp(),
                 messages: []

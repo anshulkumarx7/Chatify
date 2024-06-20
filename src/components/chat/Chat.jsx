@@ -1,20 +1,36 @@
 import { useEffect, useRef, useState } from "react"
 import "./chat.css"
 import EmojiPicker from "emoji-picker-react"
-import { auth } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
+import { doc, onSnapshot } from "firebase/firestore";
 function Chat() {
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
-    
+    const [chat,setChat]=useState();
+
     const endRef=useRef(null);
     useEffect(()=>{
         endRef.current?.scrollIntoView({behaviour:"smooth"});
     },[]);
+
+    useEffect(()=>{
+        const unSub=onSnapshot(doc(db,"chats","fLMG13XMxsGkFFbqgzjc"),(res)=>{
+            setChat(res.data());
+        })
+
+        return ()=>{
+            unSub();
+        }
+    },[])
+    console.log(chat)
+
     const handleEmoji = e => {
         setText((prev) => prev + e.emoji);
     }
+
+
     const handleSignOut=async()=>{
         try{
             await signOut(auth);
