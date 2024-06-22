@@ -36,7 +36,7 @@ function ChatList() {
                 <img onClick={() => setAddMode((prev) => !prev)} className="plus" src={addMode ? "./minus.png" : "./plus.png"} alt="" />
             </div>
             {chats.map(chat => (
-                <div className="item" key={chat.chatId}>
+                <div className="item" key={chat.chatId} >
                     <img src={chat.user.photo || "./avatar.png" }alt="" />
                     <div className="texts">
                         <span>{chat.user.username}</span>
