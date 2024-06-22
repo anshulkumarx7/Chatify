@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../../lib/firebase";
 import { ToastContainer, toast } from "react-toastify";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { GoogleAuthProvider } from "firebase/auth";
 function Signup() {
     const [userDetails, setUserDetails] = useState({
@@ -13,7 +13,7 @@ function Signup() {
         "email": "",
         "password": "",
         "photo": "",
-        "bio":""
+        "bio": ""
     })
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -25,8 +25,8 @@ function Signup() {
                 username: userDetails.username,
                 email: userDetails.email,
                 photo: userDetails.photo,
-                uid:res.user.uid,
-                bio:userDetails.bio,
+                uid: res.user.uid,
+                bio: userDetails.bio,
                 blocked: [],
             });
             await setDoc(doc(db, "userchats", res.user.uid), {
@@ -38,17 +38,17 @@ function Signup() {
 
         } catch (err) {
             console.log(err.code);
-            if(err.code=="auth/email-already-in-use"){
+            if (err.code == "auth/email-already-in-use") {
                 toast.error("Email already in use.", {
                     position: "top-center"
                 });
             }
-            else{
+            else {
                 toast.error("Error" + err, {
                     position: "top-center"
                 });
             }
-            
+
         }
     }
     const handleGoogleLogin = async () => {
@@ -56,23 +56,25 @@ function Signup() {
             const provider = new GoogleAuthProvider();
             const res = await signInWithPopup(auth, provider);
             console.log(res);
-            await setDoc(doc(db, "users", res.user.uid), {
-                username: res.user.displayName,
-                email: res.user.email,
-                photo: res.user.photoURL,
-                uid:res.user.uid,
-                bio:"",
-                blocked: [],
-            });
-            await setDoc(doc(db, "userchats", res.user.uid), {
-                chats: []
-            })
-            console.log(res);
-            toast.success("Registered Succesfully !!", {
-                position: "top-center"
-            })
-
-
+            const userDocRef = doc(db, "users", res.user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (!userDocSnap.exists()) {
+                await setDoc(doc(db, "users", res.user.uid), {
+                    username: res.user.displayName,
+                    email: res.user.email,
+                    photo: res.user.photoURL,
+                    uid: res.user.uid,
+                    bio: "",
+                    blocked: [],
+                });
+                await setDoc(doc(db, "userchats", res.user.uid), {
+                    chats: []
+                })
+                console.log(res);
+                toast.success("Registered Succesfully !!", {
+                    position: "top-center"
+                })
+            }
         } catch (err) {
             console.log(err);
             toast.error("Error" + err, {

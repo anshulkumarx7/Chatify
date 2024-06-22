@@ -27,9 +27,9 @@ export const useChatStore = create((set) => ({
             })
         }
         else {
-            set({
+            return set({
                 chatId,
-                user: user,
+                user,
                 isCurrentUserBlocked: false,
                 isReceivedUserBlocked: false,
             })
@@ -39,6 +39,14 @@ export const useChatStore = create((set) => ({
     },
     changeBlock: () => {
         set(state => ({ ...state, isReceivedUserBlocked: !state }))
-    }
+    },
+    resetChat: () => {
+        set({
+            chatId: null,
+            user: null,
+            isCurrentUserBlocked: false,
+            isReceiverBlocked: false,
+        });
+    },
 
 }))

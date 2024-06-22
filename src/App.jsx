@@ -9,10 +9,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/useUserStore";
 import { FallingLines } from "react-loader-spinner";
+import { useChatStore } from "./lib/chatStore";
 function App() {
   const { currentUser, fetchUserInfo, isLoading } = useUserStore();
+  const { chatId } = useChatStore();
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
+      console.log(chatId);
       console.log(user);
       fetchUserInfo(user?.uid);
     });
@@ -22,6 +25,7 @@ function App() {
     };
   }, [fetchUserInfo]);
   console.log(currentUser);
+  console.log(chatId);
   if (isLoading) return <div>
     <FallingLines
       color="#FFFFFF"
@@ -36,15 +40,15 @@ function App() {
         currentUser ? (
           <>
             <List />
-            <Chat />
+            {chatId && <Chat />}
             {/* <Detail /> */}
           </>
         ) : (
-          <Login />
+          <Login/>
         )
       }
 
-      {/* <Signup /> */}
+      {/*  */}
 
 
 

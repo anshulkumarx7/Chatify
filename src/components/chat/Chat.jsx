@@ -9,37 +9,38 @@ import { useChatStore } from "../../lib/chatStore";
 function Chat() {
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
-    const [chat,setChat]=useState();
-    const {chatId}=useChatStore();
+    const [chat, setChat] = useState();
+    const { chatId } = useChatStore();
+    const {resetChat}=useChatStore();
+    const endRef = useRef(null);
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behaviour: "smooth" });
+    }, []);
 
-    const endRef=useRef(null);
-    useEffect(()=>{
-        endRef.current?.scrollIntoView({behaviour:"smooth"});
-    },[]);
-
-    useEffect(()=>{
-        const unSub=onSnapshot(doc(db,"chats",chatId),(res)=>{
+    useEffect(() => {
+        const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
             setChat(res.data());
         })
 
-        return ()=>{
+        return () => {
             unSub();
         }
-    },[chatId])
+    }, [chatId])
     console.log(chat)
-
     const handleEmoji = e => {
         setText((prev) => prev + e.emoji);
     }
 
 
-    const handleSignOut=async()=>{
-        try{
+    const handleSignOut = async () => {
+        try {
             await signOut(auth);
+            resetChat();
+
             toast.success("Logout Successfully", {
                 position: "top-center"
             })
-        }catch(err){
+        } catch (err) {
             toast.error("Try again after some time!!", {
                 position: "top-center"
             })
@@ -62,46 +63,17 @@ function Chat() {
                 </div>
             </div>
             <div className="center">
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message own">
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message own">
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message">
-                    <img src="./avatar.png" alt="" />
-                    <div className="texts">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
-                <div className="message own">
-                    <div className="texts">
-                        <img src="./avatar.png" alt="" />
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam eveniet eligendi veniam unde architecto autem nisi laudantium quae natus fuga.</p>
-                        <span>1 min ago</span>
-                    </div>
-                </div>
+                {chat?.messages?.map((message) => {
+                    return (<div className="message own" key={message?.createAt}>
+                        <div className="texts">
+                            {message.img && <img src={message.img} alt="" />}
+                            <p>message.text</p>
+                            {/* <span>1 min ago</span> */}
+                        </div>
+                    </div>)
+
+                })}
+
                 <div ref={endRef}></div>
             </div>
             <div className="bottom">
