@@ -18,17 +18,27 @@ export const useChatStore = create((set) => ({
             })
         }
         //check if receiver is blocked
-        if (currentUser.blocked.includes(user.uid)) {
+        else if (currentUser.blocked.includes(user.uid)) {
             return set({
                 chatId,
-                user:user,
+                user: user,
                 isCurrentUserBlocked: false,
                 isReceivedUserBlocked: true,
             })
         }
+        else {
+            set({
+                chatId,
+                user: user,
+                isCurrentUserBlocked: false,
+                isReceivedUserBlocked: false,
+            })
+        }
+
+
     },
-    changeBlock:()=>{
-        set(state=>({...state,isReceivedUserBlocked:!state}))
+    changeBlock: () => {
+        set(state => ({ ...state, isReceivedUserBlocked: !state }))
     }
 
 }))

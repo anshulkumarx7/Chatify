@@ -25,7 +25,7 @@ function Chat() {
         return ()=>{
             unSub();
         }
-    },[])
+    },[chatId])
     console.log(chat)
 
     const handleEmoji = e => {
