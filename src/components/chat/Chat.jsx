@@ -5,10 +5,12 @@ import { auth, db } from "../../lib/firebase";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { doc, onSnapshot } from "firebase/firestore";
+import { useChatStore } from "../../lib/chatStore";
 function Chat() {
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
     const [chat,setChat]=useState();
+    const {chatId}=useChatStore();
 
     const endRef=useRef(null);
     useEffect(()=>{
@@ -16,7 +18,7 @@ function Chat() {
     },[]);
 
     useEffect(()=>{
-        const unSub=onSnapshot(doc(db,"chats","fLMG13XMxsGkFFbqgzjc"),(res)=>{
+        const unSub=onSnapshot(doc(db,"chats",chatId),(res)=>{
             setChat(res.data());
         })
 
