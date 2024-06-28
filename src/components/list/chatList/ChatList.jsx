@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import "./chatList.css"
 import AddUser from "../../addUser/AddUser";
 import { useUserStore } from "../../../lib/useUserStore";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
-import { useChatStore } from "../../../lib/chatStore"; 
+import { useChatStore } from "../../../lib/chatStore";
 import { FallingLines } from "react-loader-spinner";
 function ChatList() {
     const [addMode, setAddMode] = useState(false);
@@ -36,7 +36,25 @@ function ChatList() {
     }, [currentUser.uid])
 
     const handleSelect = async (chat) => {
-        changeChat(chat.chatId, chat.user);
+        const userChats = chats.map((item) => {
+            const { user, ...rest } = item;
+            return rest;
+        });
+        const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId);
+
+        userChats[chatIndex].isSeen = true;
+        const userChatsRef = doc(db, "userchats", currentUser.uid);
+
+        try {
+            await updateDoc(userChatsRef, {
+                chats: userChats
+            });
+            changeChat(chat.chatId, chat.user);
+
+        } catch (err) {
+            console.log(err);
+        }
+
     }
     return (
         <div className="chatList">
@@ -56,7 +74,8 @@ function ChatList() {
                 />
             </div>}
             {chats.map(chat => (
-                <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)} >
+                <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)}
+                    style={{ backgroundColor: chat?.isSeen ? "transparent" : "#c52525" }} >
                     <img src={chat.user.photo || "./avatar.png"} alt="" />
                     <div className="texts">
                         <span>{chat.user.username}</span>

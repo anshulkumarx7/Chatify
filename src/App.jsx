@@ -15,8 +15,6 @@ function App() {
   const { chatId } = useChatStore();
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
-      console.log(chatId);
-      console.log(user);
       fetchUserInfo(user?.uid);
     });
 
@@ -44,7 +42,7 @@ function App() {
             {/* <Detail /> */}
           </>
         ) : (
-          <Login/>
+          <Signup/>
         )
       }
 
