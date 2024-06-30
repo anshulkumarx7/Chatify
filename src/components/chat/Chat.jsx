@@ -8,14 +8,19 @@ import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firesto
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/useUserStore";
 import { update } from "firebase/database";
+import upload from "../../lib/upload";
 function Chat() {
     const { currentUser } = useUserStore();
 
     const [picker, setPicker] = useState(false);
     const [text, setText] = useState("");
     const [chat, setChat] = useState();
-    const { chatId,user } = useChatStore();
+    const { chatId, user } = useChatStore();
     const { resetChat } = useChatStore();
+    const [img, setImg] = useState({
+        file: null,
+        url: ""
+    });
     const endRef = useRef(null);
     useEffect(() => {
         endRef.current?.scrollIntoView({ behaviour: "smooth" });
@@ -34,15 +39,29 @@ function Chat() {
     const handleEmoji = e => {
         setText((prev) => prev + e.emoji);
     }
+    const handleImg = (e) => {
+        if (e.target.files[0]) {
+            setImg({
+                file: e.target.files[0],
+                url: URL.createObjectURL(e.target.files[0])
+            });
+        }
+    }
+
 
     const handleSend = async () => {
         if (text === "") return;
+        let imgUrl = null;
         try {
+            if (img.file) {
+                imgUrl = await upload(img.file);
+            }
             await updateDoc(doc(db, "chats", chatId), {
                 messages: arrayUnion({
                     senderId: currentUser.uid,
                     text,
-                    createdAt: new Date()
+                    createdAt: new Date(),
+                    ...(imgUrl && { img: imgUrl })
                 })
             })
             const userIDs = [currentUser.uid, user.uid];
@@ -56,21 +75,24 @@ function Chat() {
                     userChatsData.chats[chatIndex].lastMessage = text;
                     userChatsData.chats[chatIndex].isSeen = id === currentUser.uid ? true : false;
                     userChatsData.chats[chatIndex].updatedAt = Date.now();
-                    await updateDoc(userChatsRef,{
-                        chats:userChatsData.chats
+                    await updateDoc(userChatsRef, {
+                        chats: userChatsData.chats
                     });
-                    setText("");
                 }
             })
 
 
         } catch (err) {
             console.log(err);
-            toast.error("Unknown Error",{
-                position:"top-center"
+            toast.error("Unknown Error", {
+                position: "top-center"
             });
-            setText("");
         }
+        setText("");
+        setImg({
+            file: null,
+            url: ""
+        })
     }
 
 
@@ -88,13 +110,14 @@ function Chat() {
             })
         }
     }
+    console.log(img.url);
     return (
         <div className="chat">
             <div className="top">
                 <div className="user">
-                    <img src="./avatar.png" alt="" />
+                    <img src={user.photo || "./avatar.png"} alt="" />
                     <div className="texts">
-                        <span>Anshul</span>
+                        <span>{user.username}</span>
                         <p>Tech enthusiast 😎</p>
                     </div>
                 </div>
@@ -106,7 +129,7 @@ function Chat() {
             </div>
             <div className="center">
                 {chat?.messages?.map((message) => {
-                    return (<div className="message own" key={message?.createAt}>
+                    return (<div className={message.senderId===currentUser.uid ? "message own":"message"} key={message?.createdAt}>
                         <div className="texts">
                             {message.img && <img src={message.img} alt="" />}
                             <p>{message.text}</p>
@@ -115,14 +138,21 @@ function Chat() {
                     </div>)
 
                 })}
+                {img.url && <div className="message own">
+                    <div className="texts">
+                        <img src={img.url} alt="" />
+                    </div>
+                </div>}
+
 
                 <div ref={endRef}></div>
             </div>
             <div className="bottom">
                 <div className="icons">
-                    <img src="./img.png" alt="" />
-                    {/* <img src="./camera.png" alt="" />
-                <img src="./mic.png" alt="" /> */}
+                    <label htmlFor="file">
+                        <img src="./img.png" alt="" />
+                    </label>
+                    <input type="file" name="file" id="file" style={{ display: "none" }} onChange={handleImg} />
                 </div>
                 <input className="input" value={text} type="text" placeholder="Type a message ..." onChange={e => setText(e.target.value)} />
                 <div className="emoji">
