@@ -7,7 +7,9 @@ import { auth, db } from "../../lib/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { GoogleAuthProvider } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
 function Signup() {
+    const navigate=useNavigate();
     const [userDetails, setUserDetails] = useState({
         "username": "",
         "email": "",
@@ -35,6 +37,7 @@ function Signup() {
             toast.success("Registered Succesfully!!", {
                 position: "top-center"
             })
+            navigate("/login");
 
         } catch (err) {
             console.log(err.code);
@@ -75,6 +78,7 @@ function Signup() {
                     position: "top-center"
                 })
             }
+            navigate("/");
         } catch (err) {
             console.log(err);
             toast.error("Error" + err, {
@@ -107,7 +111,7 @@ function Signup() {
                 </div>
                 <img onClick={handleGoogleLogin} src="./google.png" alt="" />
                 <div className="registeredUser">
-                    <p>Already an account?  <span><a href=""> Login</a></span></p>
+                    <p>Already an account?  <span><Link to="/login"> Login</Link></span></p>
                 </div>
                 <ToastContainer />
             </div>

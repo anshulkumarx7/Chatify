@@ -1,7 +1,4 @@
 
-// import Detail from "./components/detail/Detail"
-import List from "./components/list/List"
-import Chat from "./components/chat/Chat"
 import { useEffect } from "react";
 import Login from "./components/login/Login";
 import Signup from "./components/login/Signup";
@@ -10,6 +7,8 @@ import { auth } from "./lib/firebase";
 import { useUserStore } from "./lib/useUserStore";
 import { FallingLines } from "react-loader-spinner";
 import { useChatStore } from "./lib/chatStore";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Home from "./components/Home/Home";
 function App() {
   const { currentUser, fetchUserInfo, isLoading } = useUserStore();
   const { chatId } = useChatStore();
@@ -34,22 +33,11 @@ function App() {
   </div>
   return (
     <div className="container">
-      {
-        currentUser ? (
-          <>
-            <List />
-            {chatId && <Chat />}
-            {/* <Detail /> */}
-          </>
-        ) : (
-          <Signup/>
-        )
-      }
-
-      {/*  */}
-
-
-
+      <Routes>
+        <Route path='/' element={currentUser ? <Home />:<Navigate replace to ={"/login"}/>} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+      </Routes>
     </div>
   )
 }

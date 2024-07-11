@@ -4,8 +4,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebase";
+import { Link, useNavigate } from "react-router-dom";
 function Login() {
-
+    const navigate=useNavigate();
     const [user, setUser] = useState({
         email: "",
         password: ""
@@ -24,6 +25,8 @@ function Login() {
             toast.success("LoggedIn Succesfully !!", {
                 position: "top-center"
             })
+            navigate("/");
+
         } catch (err) {
             if (err.code == "auth/invalid-credential") {
                 toast.error("Invalid Credential.", {
@@ -56,7 +59,7 @@ function Login() {
 
                 <img src="./google.png" alt="" />
                 <div className="registeredUser">
-                    <p><span><a href="">Create an account</a></span></p>
+                    <p><span><Link to="/signup">Create an account</Link></span></p>
                 </div>
 
                 <ToastContainer />

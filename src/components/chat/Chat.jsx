@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/useUserStore";
-import { update } from "firebase/database";
+// import { update } from "firebase/database";
 import upload from "../../lib/upload";
 function Chat() {
     const { currentUser } = useUserStore();

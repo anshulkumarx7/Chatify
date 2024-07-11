@@ -27,14 +27,13 @@ function ChatList() {
             const chatData = await Promise.all(promises);
             setChats(chatData.sort((a, b) => b.UpdatedAt - a.UpdatedAt));
         });
-        console.log("done");
+        
 
 
         return () => {
             unsub();
         }
-    }, [currentUser.uid])
-
+    }, [currentUser.uid]);
     const handleSelect = async (chat) => {
         const userChats = chats.map((item) => {
             const { user, ...rest } = item;
