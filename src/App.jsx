@@ -34,7 +34,7 @@ function App() {
   return (
     <div className="container">
       <Routes>
-        <Route path='/' element={currentUser ? <Home />:<Navigate replace to ={"/login"}/>} />
+        <Route element={currentUser ? <Home />:<Navigate replace to ={'/login'}/>} path='/' />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
       </Routes>
