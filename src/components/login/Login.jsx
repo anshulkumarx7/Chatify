@@ -25,7 +25,10 @@ function Login() {
             toast.success("LoggedIn Succesfully !!", {
                 position: "top-center"
             })
-            navigate("/");
+            console.log("done");
+            setTimeout(()=>{
+                navigate("/");
+            },5000);
 
         } catch (err) {
             if (err.code == "auth/invalid-credential") {
