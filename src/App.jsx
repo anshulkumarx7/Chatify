@@ -9,6 +9,7 @@ import { FallingLines } from "react-loader-spinner";
 import { useChatStore } from "./lib/chatStore";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
+import NotFound from "./components/NotFound/NotFound";
 function App() {
   const { currentUser, fetchUserInfo, isLoading } = useUserStore();
   const { chatId } = useChatStore();
@@ -35,8 +36,9 @@ function App() {
     <div className="container">
       <Routes>
         <Route element={currentUser ? <Home />:<Navigate replace to ={'/login'}/>} path='/' />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={currentUser==null ? <Login /> : <Navigate replace to={'/'}/>} />
+        <Route path='/signup' element={currentUser==null ? <Signup /> : <Navigate replace to={'/'}/>} />
+        <Route path='*' element={<NotFound/>}/>
       </Routes>
     </div>
   )
